@@ -6,7 +6,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(120), nullable=False)
 
 class Video(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,7 +16,7 @@ class Video(db.Model):
 
 class Annotation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    video_id = db.Column(db.Integer, db.ForeignKey('video.id'), nullable=False)
     timestamp = db.Column(db.Float, nullable=False)
-    description = db.Column(db.Text, nullable=True)
+    description = db.Column(db.Text, nullable=False)
+    video_id = db.Column(db.Integer, db.ForeignKey('video.id'), nullable=False)
     video = db.relationship('Video', backref=db.backref('annotations', lazy=True))
