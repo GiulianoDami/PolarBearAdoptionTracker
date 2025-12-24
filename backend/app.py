@@ -40,7 +40,7 @@ def upload_video():
 
 @app.route('/annotate', methods=['POST'])
 def annotate_video():
-    data = request.json
+    data = request.get_json()
     video_id = data.get('video_id')
     timestamp = data.get('timestamp')
     description = data.get('description')
@@ -60,14 +60,12 @@ def annotate_video():
 @app.route('/videos', methods=['GET'])
 def get_videos():
     videos = Video.query.all()
-    video_list = [{'id': video.id, 'filename': video.filename} for video in videos]
-    return jsonify(video_list), 200
+    return jsonify([{'id': video.id, 'filename': video.filename} for video in videos]), 200
 
 @app.route('/annotations/<int:video_id>', methods=['GET'])
 def get_annotations(video_id):
     annotations = Annotation.query.filter_by(video_id=video_id).all()
-    annotation_list = [{'id': annotation.id, 'timestamp': annotation.timestamp, 'description': annotation.description} for annotation in annotations]
-    return jsonify(annotation_list), 200
+    return jsonify([{'id': annotation.id, 'timestamp': annotation.timestamp, 'description': annotation.description} for annotation in annotations]), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
